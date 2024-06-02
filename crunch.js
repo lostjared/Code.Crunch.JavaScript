@@ -1,3 +1,24 @@
+const cppOperators = [
+    "=", "==", "!=", "<", ">", "<=", ">=", "+", "-", "*", "/", "%",
+    "++", "--", "&&", "||", "!", "&", "|", "^", "~", "<<", ">>",
+    "?", ":", "::", ".", "->", "[]", "()", "{}", "[]=", "->*", ".*", "+=", "-=", "*=", "/=", "%=",
+    "&=", "|=", "^=", "<<=", ">>=", ",", ";", "."
+];
+
+function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function removeSpaces(input) {
+    let regexParts = cppOperators.map(op => escapeRegExp(op));
+    let allSymbols = [...regexParts, '\\{', '\\}', '\\(', '\\)', '\\[', '\\]'];
+    let combinedRegex = new RegExp(`\\s*(${allSymbols.join('|')})\\s*`, 'g');
+    let result = input.replace(combinedRegex, '$1');
+    result = result.replace(/(\w)\s+([\{\}\(\)\[\]\,;])/g, '$1$2');
+    result = result.replace(/([\{\}\(\)\[\]\,;])\s+(\w)/g, '$1$2');
+    return result;
+}
+
 function crunch(input) {
     let data = input;
     data = removeMlComment(data);
@@ -6,7 +27,6 @@ function crunch(input) {
     
     lines.forEach(line => {
         if (line.trim() === '') {
-            // Skip empty lines
             return;
         }
         if (line.trim().startsWith('#')) {
@@ -16,9 +36,8 @@ function crunch(input) {
         }
     });
     
-    // Replace multiple spaces with a single space
     output = output.replace(/\s\s+/g, ' ');
-    
+    output = removeSpaces(output);
     return output.trim();
 }
 
