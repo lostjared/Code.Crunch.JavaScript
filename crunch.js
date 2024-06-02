@@ -24,18 +24,14 @@ function crunch(input) {
     data = removeMlComment(data);
     const lines = data.split('\n');
     let output = '';
-    
+
     lines.forEach(line => {
-        if (line.trim() === '') {
+        if (line.trim() === '' || line.trim().startsWith('#')) {
             return;
         }
-        if (line.trim().startsWith('#')) {
-            output += line + '\n';
-        } else {
-            output += crunchLine(line) + ' ';
-        }
+        output += crunchLine(line) + ' ';
     });
-    
+
     output = output.replace(/\s\s+/g, ' ');
     output = removeSpaces(output);
     return output.trim();
@@ -65,7 +61,7 @@ function crunchLine(s) {
     let output = '';
     let grabString = false;
     let grabChar = false;
-    
+
     for (let i = 0; i < s.length; i++) {
         if (!grabString && !grabChar) {
             if (!testchr(s, i)) {
@@ -78,7 +74,7 @@ function crunchLine(s) {
                 return output;
             }
         }
-        
+
         if (s[i] === '\\' && (grabString || grabChar)) {
             output += s[i];
             if (i + 1 < s.length) {
@@ -91,7 +87,7 @@ function crunchLine(s) {
         } else if (s[i] === '\'' && !grabString) {
             grabChar = !grabChar;
         }
-        
+
         output += s[i];
     }
     return output;
