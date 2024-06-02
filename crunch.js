@@ -1,39 +1,24 @@
-const cppOperators = [
-    "=", "==", "!=", "<", ">", "<=", ">=", "+", "-", "*", "/", "%",
-    "++", "--", "&&", "||", "!", "&", "|", "^", "~", "<<", ">>",
-    "?", ":", "::", ".", "->", "[]", "()", "{}", "[]=", "->*", ".*", "+=", "-=", "*=", "/=", "%=",
-    "&=", "|=", "^=", "<<=", ">>=", ",", ";", "."
-];
-
-function escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-function removeSpaces(input) {
-    let regexParts = cppOperators.map(op => escapeRegExp(op));
-    let allSymbols = [...regexParts, '\\{', '\\}', '\\(', '\\)', '\\[', '\\]'];
-    let combinedRegex = new RegExp(`\\s*(${allSymbols.join('|')})\\s*`, 'g');
-    let result = input.replace(combinedRegex, '$1');
-    result = result.replace(/(\w)\s+([\{\}\(\)\[\]\,;])/g, '$1$2');
-    result = result.replace(/([\{\}\(\)\[\]\,;])\s+(\w)/g, '$1$2');
-    return result;
-}
-
 function crunch(input) {
     let data = input;
     data = removeMlComment(data);
     const lines = data.split('\n');
     let output = '';
-
+    
     lines.forEach(line => {
-        if (line.trim() === '' || line.trim().startsWith('#')) {
+        if (line.trim() === '') {
+            // Skip empty lines
             return;
         }
-        output += crunchLine(line) + ' ';
+        if (line.trim().startsWith('#')) {
+            output += line + '\n';
+        } else {
+            output += crunchLine(line) + ' ';
+        }
     });
-
+    
+    // Replace multiple spaces with a single space
     output = output.replace(/\s\s+/g, ' ');
-    output = removeSpaces(output);
+    
     return output.trim();
 }
 
@@ -61,7 +46,7 @@ function crunchLine(s) {
     let output = '';
     let grabString = false;
     let grabChar = false;
-
+    
     for (let i = 0; i < s.length; i++) {
         if (!grabString && !grabChar) {
             if (!testchr(s, i)) {
@@ -74,7 +59,7 @@ function crunchLine(s) {
                 return output;
             }
         }
-
+        
         if (s[i] === '\\' && (grabString || grabChar)) {
             output += s[i];
             if (i + 1 < s.length) {
@@ -87,7 +72,7 @@ function crunchLine(s) {
         } else if (s[i] === '\'' && !grabString) {
             grabChar = !grabChar;
         }
-
+        
         output += s[i];
     }
     return output;
