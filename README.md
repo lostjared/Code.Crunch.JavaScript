@@ -9,7 +9,7 @@ version.
 
 ## Features
 
-= Strips out preproccesor directives
+- Strips out preproccesor directives
 - Removes multiline and single line comments.
 - Preserves single character constants and string literals.
 - Eliminates unnecessary whitespace, including double spaces.
