@@ -101,7 +101,7 @@ function parseInput(input) {
                     if (line.startsWith('#')) {
                         arr.push(line);
                     } else {
-                        let words = line.split(' ').filter(word => word.trim() !== '');
+                        let words = line.split('\n').filter(word => word.trim() !== '');
                         arr.push(...words);
                     }
                 }
