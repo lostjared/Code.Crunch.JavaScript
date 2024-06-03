@@ -239,29 +239,31 @@ function removeMlComment(text) {
 function removeComment(input) {
     let output = '';
     let i = 0;
-    let in_q = false;
-    let in_sq = false;
+    let inDoubleQuote = false;
+    let inSingleQuote = false;
+
     while (i < input.length) {
-
-        if(input[i] == "\""   && i-1 >= 0 && input[i-1] != "\\")
-            in_q = !in_q;
-
-        if(input[i] == "\'"  && i-1 >= 0 && input[i-1] != "\\") {
-            in_sq = !in_sq;
-        }
-
-        if (in_sq == false && in_q == false && input[i] === '/' && i + 1 < input.length && input[i + 1] === '/') {
-            i += 2; 
+        if (input[i] === '\"' && (i === 0 || input[i - 1] !== '\\') && !inSingleQuote) {
+            inDoubleQuote = !inDoubleQuote;
+            output += input[i];
+            i++;
+        } else if (input[i] === '\'' && (i === 0 || input[i - 1] !== '\\') && !inDoubleQuote) {
+            inSingleQuote = !inSingleQuote;
+            output += input[i];
+            i++;
+        } else if (!inDoubleQuote && !inSingleQuote && input[i] === '/' && i + 1 < input.length && input[i + 1] === '/') {
             while (i < input.length && input[i] !== '\n') {
-                i++; 
+                i++;
             }
         } else {
             output += input[i];
             i++;
         }
     }
+    console.log(output);
     return output;
 }
+
 function chkChr(text, i, c) {
     return i < text.length && text[i] === c;
 }
