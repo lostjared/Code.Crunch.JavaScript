@@ -10,12 +10,43 @@ function escapeRegExp(string) {
 }
 
 function removeSpaces(input) {
-    let regexParts = cppOperators.map(op => escapeRegExp(op));
-    let allSymbols = [...regexParts, '\\{', '\\}', '\\(', '\\)', '\\[', '\\]'];
-    let combinedRegex = new RegExp(`\\s*(${allSymbols.join('|')})\\s*`, 'g');
-    let result = input.replace(combinedRegex, '$1');
-    result = result.replace(/(\w)\s+([\{\}\(\)\[\]\,;])/g, '$1$2');
-    result = result.replace(/([\{\}\(\)\[\]\,;])\s+(\w)/g, '$1$2');
+    const cppOperators = ["+", "-", "*", "/", "=", "==", "!=", "<", ">", "<=", ">=", "&&", "||", "!", "&", "|", "^", "%", "<<", ">>", "++", "--"];
+    const symbols = ["{", "}", "(", ")", "[", "]", ",", ";"];
+    function removeSpacesAroundOperators(input) {
+        for (let op of cppOperators) {
+            let parts = input.split(op);
+            input = parts.join(op.trim());
+        }
+        return input;
+    }
+    function removeSpacesAroundSymbols(input, symbols) {
+        for (let symbol of symbols) {
+            let parts = input.split(symbol);
+            input = parts.map(part => part.trim()).join(symbol);
+        }
+        return input;
+    }
+    input = removeSpacesAroundOperators(input);
+    input = removeSpacesAroundSymbols(input, symbols);
+    for (let symbol of symbols) {
+        input = input.split(symbol).map(part => part.trim()).join(symbol);
+    }
+    let result = '';
+    let previousChar = '';
+    for (let i = 0; i < input.length; i++) {
+        let currentChar = input[i];
+
+        if (symbols.includes(currentChar) || symbols.includes(previousChar)) {
+            if (currentChar !== ' ') {
+                result += currentChar;
+            }
+        } else {
+            result += currentChar;
+        }
+
+        previousChar = currentChar;
+    }
+
     return result;
 }
 
