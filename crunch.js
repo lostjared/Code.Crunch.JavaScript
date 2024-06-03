@@ -95,9 +95,13 @@ function parseInput(input) {
     let pos = input.indexOf("\"");
 
     while (input.length > 0) {
-
-        let pos2 = input.indexOf("#");
-
+         let pos2 = input.indexOf("#");
+         if(pos != -1) {
+            let dbl_chk = input.indexOf("\"", pos+1);
+            if(dbl_chk == -1) {
+                return arr;
+            }
+         }
         if (pos === -1) {
             let lines = input.split('\n');
             for (let line of lines) {
@@ -110,16 +114,34 @@ function parseInput(input) {
                 }
             }
             break;
-        } else if(pos2 < pos) {
-               if(input.trim().startsWith("#")) {
-                    let pos = input.indexOf("\n");
-                    if(pos != -1) {
-                        let left = input.substring(0, pos); 
+        } else if(pos2 != -1 && pos2 < pos) {
+             if(input.trim().startsWith("#")) {
+                    let posx = input.indexOf("\n");
+                    if(posx != -1) {
+                        let left = input.substring(0, posx); 
                         arr.push(left);
-                        let right = input.substring(pos + 1);
-                        input = right;
-                        pos = input.indexOf("\n");
+                        let right = input.substring(posx + 1);
+                        input = right;                   
+                        pos = input.indexOf("\"");
                         continue;
+                    } else {
+                        arr.push(input);
+                        return arr;
+                    }
+                }
+                else {
+
+                    let nl = input.indexOf("\n");
+                    if(nl < pos2) {
+                        let left = input.substring(0, nl);
+                        let right = input.substring(nl+1);
+                        let words = left.split('\n').filter(word => word.trim() !== '');
+                        arr.push(...words);
+                        input = right;
+                        pos = input.indexOf("\"");
+                        continue;
+                    } else {
+                            
                     }
                 }
         }
@@ -133,7 +155,7 @@ function parseInput(input) {
                 let lines = left.split('\n');
                 for (let line of lines) {
                     if (line.trim() === '') continue;
-                    if (line.startsWith('#')) {
+                    if (line.trim().startsWith('#')) {
                         arr.push(line);
                     } else {
                         let words = line.split('\n').filter(word => word.trim() !== '');
@@ -153,39 +175,51 @@ function parseInput(input) {
     return arr;
 }
 
-function procLine(line, last = false) {
+let regular = false;
+
+function procLine(line) {
     let output = '';
     if (line.trim() === '') {
+        regular = false;
         return '';
     }
     if (line.trim().startsWith("\"")) {
         output += line;
+        regular = false;
     } else if (line.trim().startsWith('#')) {
-        if (last === true)
+        if(regular == true) {
             output += "\n";
-
+        }
+        regular = false;
         output += line + "\n";
     } else {
         let linez = crunchLine(line) + ' ';
         linez = linez.replace(/\s\s+/g, ' ');
         linez = removeSpaces(linez);
         output += linez;
+        if(linez.length > 0)
+            regular = true;
     }
     return output;
 }
 
 function crunch(input) {
     let data = input;
+
+    if(data.indexOf("\n") == -1) {
+        return procLine(data);
+    }
+
     data = removeMlComment(data);
     const lines = parseInput(data);
-    console.log
+
+    console.log(lines);
     let output = '';
-    for (let i = 0; i < lines.length - 1; ++i) {
+    for (let i = 0; i < lines.length; ++i) {
         let line = lines[i];
+        if(line.trim() == '') continue;
         output += procLine(line);
     }
-    if (lines.length - 1 > 0)
-        output += procLine(lines[lines.length - 1], true);
     return output;
 }
 
