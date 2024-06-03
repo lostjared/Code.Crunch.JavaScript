@@ -114,7 +114,7 @@ function parseInput(input) {
                 }
             }
             break;
-        } else if(pos2 != -1 && pos2 < pos) {
+        } else if(pos2 != -1 && pos2 < pos) {;
              if(input.trim().startsWith("#")) {
                     let posx = input.indexOf("\n");
                     if(posx != -1) {
@@ -132,7 +132,7 @@ function parseInput(input) {
                 else {
 
                     let nl = input.indexOf("\n");
-                    if(nl < pos2) {
+                    if(nl != -1 && nl < pos2) {
                         let left = input.substring(0, nl);
                         let right = input.substring(nl+1);
                         let words = left.split('\n').filter(word => word.trim() !== '');
@@ -141,7 +141,7 @@ function parseInput(input) {
                         pos = input.indexOf("\"");
                         continue;
                     } else {
-                            
+                        console.log(input);
                     }
                 }
         }
@@ -205,15 +205,12 @@ function procLine(line) {
 
 function crunch(input) {
     let data = input;
-
     if(data.indexOf("\n") == -1) {
         return procLine(data);
     }
-
     data = removeMlComment(data);
+    data = removeComment(data);
     const lines = parseInput(data);
-
-    console.log(lines);
     let output = '';
     for (let i = 0; i < lines.length; ++i) {
         let line = lines[i];
@@ -239,6 +236,22 @@ function removeMlComment(text) {
     return temp;
 }
 
+function removeComment(input) {
+    let output = '';
+    let i = 0;
+    while (i < input.length) {
+        if (input[i] === '/' && i + 1 < input.length && input[i + 1] === '/') {
+            i += 2; 
+            while (i < input.length && input[i] !== '\n') {
+                i++; 
+            }
+        } else {
+            output += input[i];
+            i++;
+        }
+    }
+    return output;
+}
 function chkChr(text, i, c) {
     return i < text.length && text[i] === c;
 }
