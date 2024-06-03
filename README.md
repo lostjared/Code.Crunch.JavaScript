@@ -2,6 +2,8 @@
 
 ![screenshot](https://github.com/lostjared/Code.Crunch.JavaScript/blob/main/screenshot.jpg)
 
+![screenshot2](https://github.com/lostjared/Code.Crunch.JavaScript/blob/main/crunch.jpg)
+
 This project is a simple web-based tool to "crunch" C++ code by removing 
 unnecessary whitespace and comments while preserving the code's 
 functionality. It processes input C++ code and outputs a more compact 
