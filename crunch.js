@@ -11,7 +11,7 @@ function escapeRegExp(string) {
 
 function removeSpaces(input) {
     const cppOperators = ["+", "-", "*", "/", "=", "==", "!=", "<", ">", "<=", ">=", "&&", "||", "!", "&", "|", "^", "%", "<<", ">>", "++", "--"];
-    const symbols = ["{", "}", "(", ")", "[", "]", ",", ";", "\"", "\\"];
+    const symbols = ["{", "}", "(", ")", "[", "]", ",", ":", ";", "\"", "\\"];
     for (let op of cppOperators) {
         let parts = input.split(op);
         input = parts.map(part => part.trim()).join(op);
@@ -95,6 +95,9 @@ function parseInput(input) {
     let pos = input.indexOf("\"");
 
     while (input.length > 0) {
+
+        let pos2 = input.indexOf("#");
+
         if (pos === -1) {
             let lines = input.split('\n');
             for (let line of lines) {
@@ -107,7 +110,20 @@ function parseInput(input) {
                 }
             }
             break;
-        } else {
+        } else if(pos2 < pos) {
+               if(input.trim().startsWith("#")) {
+                    let pos = input.indexOf("\n");
+                    if(pos != -1) {
+                        let left = input.substring(0, pos); 
+                        arr.push(left);
+                        let right = input.substring(pos + 1);
+                        input = right;
+                        pos = input.indexOf("\n");
+                        continue;
+                    }
+                }
+        }
+        else {
             let filter_str = filterString(input);
             let left = filter_str[0];
             let quotedValue = filter_str[1];
