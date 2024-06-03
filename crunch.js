@@ -239,8 +239,18 @@ function removeMlComment(text) {
 function removeComment(input) {
     let output = '';
     let i = 0;
+    let in_q = false;
+    let in_sq = false;
     while (i < input.length) {
-        if (input[i] === '/' && i + 1 < input.length && input[i + 1] === '/') {
+
+        if(input[i] == "\""   && i-1 >= 0 && input[i-1] != "\\")
+            in_q = !in_q;
+
+        if(input[i] == "\'"  && i-1 >= 0 && input[i-1] != "\\") {
+            in_sq = !in_sq;
+        }
+
+        if (in_sq == false && in_q == false && input[i] === '/' && i + 1 < input.length && input[i + 1] === '/') {
             i += 2; 
             while (i < input.length && input[i] !== '\n') {
                 i++; 
