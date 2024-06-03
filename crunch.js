@@ -83,7 +83,7 @@ function parseInput(input) {
                 if (line.startsWith('#')) {
                     arr.push(line);
                 } else {
-                    let words = line.split(' ').filter(word => word.trim() !== '');
+                    let words = line.split('\n').filter(word => word.trim() !== '');
                     arr.push(...words);
                 }
             }
@@ -143,6 +143,7 @@ function crunch(input) {
     let data = input;
     data = removeMlComment(data);
     const lines = parseInput(data);
+    console.log
     let output = '';
     for (let i = 0; i < lines.length - 1; ++i) {
         let line = lines[i];
