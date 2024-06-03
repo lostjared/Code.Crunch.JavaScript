@@ -11,31 +11,22 @@ function escapeRegExp(string) {
 
 function removeSpaces(input) {
     const cppOperators = ["+", "-", "*", "/", "=", "==", "!=", "<", ">", "<=", ">=", "&&", "||", "!", "&", "|", "^", "%", "<<", ">>", "++", "--"];
-    const symbols = ["{", "}", "(", ")", "[", "]", ",", ";"];
-    function removeSpacesAroundOperators(input) {
-        for (let op of cppOperators) {
-            let parts = input.split(op);
-            input = parts.join(op.trim());
-        }
-        return input;
+    const symbols = ["{", "}", "(", ")", "[", "]", ",", ";", "\"", "\\"];
+    for (let op of cppOperators) {
+        let parts = input.split(op);
+        input = parts.map(part => part.trim()).join(op);
     }
-    function removeSpacesAroundSymbols(input, symbols) {
-        for (let symbol of symbols) {
-            let parts = input.split(symbol);
-            input = parts.map(part => part.trim()).join(symbol);
-        }
-        return input;
+    for (let symbol of symbols) {
+        let parts = input.split(symbol);
+        input = parts.map(part => part.trim()).join(symbol);
     }
-    input = removeSpacesAroundOperators(input);
-    input = removeSpacesAroundSymbols(input, symbols);
     let result = '';
     let previousChar = '';
     for (let i = 0; i < input.length; i++) {
         let currentChar = input[i];
+
         if (symbols.includes(currentChar) || symbols.includes(previousChar)) {
-            if (currentChar !== ' ' && previousChar !== ' ') {
-                result += currentChar;
-            } else if (previousChar !== ' ' && currentChar !== ' ') {
+            if (currentChar !== ' ') {
                 result += currentChar;
             }
         } else {
@@ -45,6 +36,8 @@ function removeSpaces(input) {
     }
     return result;
 }
+
+
 function filterString(input) {
     let left = '';
     let quoted = '';
