@@ -19,24 +19,131 @@ function removeSpaces(input) {
     return result;
 }
 
+function filterString(input) {
+    let left = '';
+    let quoted = '';
+    let right = '';
+    let i = 0;
+
+    for (i = 0; i < input.length; ++i) {
+        if (input[i] == '\"')
+            break;
+        else
+            left += input[i];
+    }
+
+    let rightPart = input.substring(i);
+    let quotedResult = filterQuote(rightPart);
+
+    if (quotedResult) {
+        quoted = quotedResult[0];
+        let quoteEndIndex = quotedResult[1];
+        right = rightPart.substring(quoteEndIndex);
+
+        return [left, quoted, right];
+       
+    } else {
+        console.log("No valid quoted string found");
+    }
+}
+
+function filterQuote(input) {
+    let quoted = '\"';
+    for (let i = 1; i < input.length; ++i) {
+        if (input[i] == '\\' && i < input.length - 1) {
+            quoted += input[i];
+            quoted += input[i + 1];
+            i += 1;
+            continue;
+        }
+        if (input[i] == '\"') {
+            quoted += '\"';
+            return [quoted, i + 1];
+        } else {
+            quoted += input[i];
+        }
+    }
+    return null;
+}
+function parseInput(input) {
+    let arr = [];
+    let pos = input.indexOf("\"");
+
+    while (input.length > 0) {
+        if (pos === -1) {
+            let lines = input.split('\n');
+            for (let line of lines) {
+                if (line.trim() === '') continue; 
+                if (line.startsWith('#')) {
+                    arr.push(line);
+                } else {
+                    let words = line.split(' ').filter(word => word.trim() !== '');
+                    arr.push(...words);
+                }
+            }
+            break;
+        } else {
+            let filter_str = filterString(input);
+            let left = filter_str[0];
+            let quotedValue = filter_str[1];
+            let remaining = filter_str[2];
+            if (left.length > 0) {
+                let lines = left.split('\n');
+                for (let line of lines) {
+                    if (line.trim() === '') continue; 
+                    if (line.startsWith('#')) {
+                        arr.push(line);
+                    } else {
+                        let words = line.split(' ').filter(word => word.trim() !== '');
+                        arr.push(...words);
+                    }
+                }
+            }
+            arr.push(quotedValue.trim());
+
+            input = remaining;
+        }
+        pos = input.indexOf("\"");
+    }
+
+    return arr;
+}
+
+function procLine(line, last=false) {
+    let output = '';
+    if (line.trim() === '') {
+        return '';
+    } 
+    if(line.trim().startsWith("\"")) {
+        output += line;
+    } else if(line.trim().startsWith('#')) {
+        if(last === true) 
+            output += "\n";
+
+        output += line + "\n";
+    }else {
+        let linez = crunchLine(line) + ' ';
+        linez = linez.replace(/\s\s+/g, ' ');
+        linez = removeSpaces(linez);
+        output += linez;
+    }
+    return output;
+}
+
 function crunch(input) {
     let data = input;
     data = removeMlComment(data);
-    const lines = data.split('\n');
+    const lines = parseInput(data);
+    console.log(lines);
     let output = '';
-
-    lines.forEach(line => {
-        if (line.trim() === '' || line.trim().startsWith('#')) {
-            return;
-        }
-        output += crunchLine(line) + ' ';
-    });
-
-    output = output.replace(/\s\s+/g, ' ');
-    output = removeSpaces(output);
-    return output.trim();
+    for(let i = 0; i < lines.length-1; ++i) {
+        let line = lines[i];
+        output += procLine(line);
+    }
+    if(lines.length-1 > 0) 
+        output += procLine(lines[lines.length-1], true);
+    return output;
 }
-
 function removeMlComment(text) {
     let temp = '';
     for (let i = 0; i < text.length; i++) {
