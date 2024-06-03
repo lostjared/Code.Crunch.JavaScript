@@ -28,28 +28,23 @@ function removeSpaces(input) {
     }
     input = removeSpacesAroundOperators(input);
     input = removeSpacesAroundSymbols(input, symbols);
-    for (let symbol of symbols) {
-        input = input.split(symbol).map(part => part.trim()).join(symbol);
-    }
     let result = '';
     let previousChar = '';
     for (let i = 0; i < input.length; i++) {
         let currentChar = input[i];
-
         if (symbols.includes(currentChar) || symbols.includes(previousChar)) {
-            if (currentChar !== ' ') {
+            if (currentChar !== ' ' && previousChar !== ' ') {
+                result += currentChar;
+            } else if (previousChar !== ' ' && currentChar !== ' ') {
                 result += currentChar;
             }
         } else {
             result += currentChar;
         }
-
         previousChar = currentChar;
     }
-
     return result;
 }
-
 function filterString(input) {
     let left = '';
     let quoted = '';
