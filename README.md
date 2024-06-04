@@ -5,10 +5,11 @@
 This project is a simple web-based tool to "crunch" C++ code by removing 
 unnecessary whitespace and comments while preserving the code's 
 functionality. It processes input C++ code and outputs a more compact 
-version.
+version. I got this working for most code. I am not going ot work on this anymore
+as I used this to create some videos and now am moving on.
 
 ## Features
-
+- Preserves preprocesscor directives.
 - Removes multiline and single line comments.
 - Preserves single character constants and string literals.
 - Eliminates unnecessary whitespace, including double spaces.
