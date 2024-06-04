@@ -15,6 +15,10 @@ as I used this to create some videos and now am moving on.
 - Eliminates unnecessary whitespace, including double spaces.
 - Skips empty lines and space characters before comments.
 
+## Known Issues
+- when you have // within a string under certain conditions it will cause the text to be unaligned
+
+
 ## Usage
 
 1. Open the `index.html` file in your web browser.
