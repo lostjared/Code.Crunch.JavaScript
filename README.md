@@ -8,6 +8,10 @@ functionality. It processes input C++ code and outputs a more compact
 version. I got this working for most C++ code. I am not going to work on this anymore
 as I used this to create some videos and now am moving on.
 
+## Motivation
+I wanted to make a video with scrolling compacted C++ code so I wrote this to accomplish that.
+I thought others might find it useful so I posted it here.
+
 ## Features
 - Preserves preprocesscor directives.
 - Removes multiline and single line comments.
