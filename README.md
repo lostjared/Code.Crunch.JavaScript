@@ -1,4 +1,4 @@
-# Code.Crunch.JavaScript
+# C++ Code Cruncher (compactor)
 
 ![screenshot2](https://github.com/lostjared/Code.Crunch.JavaScript/blob/main/crunch.jpg)
 
