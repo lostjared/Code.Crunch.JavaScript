@@ -95,6 +95,11 @@ function parseInput(input) {
     let pos = input.indexOf("\"");
 
     while (input.length > 0) {
+
+        if(pos > 0 && input[pos-1] == '\\') {
+            pos = input.indexOf("\"", pos + 1);
+        }
+
          let pos2 = input.indexOf("#");
          if(pos != -1) {
             let dbl_chk = input.indexOf("\"", pos+1);
