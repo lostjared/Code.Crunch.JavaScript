@@ -5,7 +5,7 @@
 This project is a simple web-based tool to "crunch" C++ code by removing 
 unnecessary whitespace and comments while preserving the code's 
 functionality. It processes input C++ code and outputs a more compact 
-version. I got this working for most code. I am not going to work on this anymore
+version. I got this working for most C++ code. I am not going to work on this anymore
 as I used this to create some videos and now am moving on.
 
 ## Features
