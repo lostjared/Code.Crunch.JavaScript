@@ -16,7 +16,7 @@ I thought others might find it useful so I posted it here.
 - Preserves preprocesscor directives.
 - Removes multiline and single line comments.
 - Preserves single character constants and string literals.
-- Eliminates unnecessary whitespace, including double spaces.
+- Eliminates unnecessary whitespace, including double spaces and unrequired space between operaators.
 - Skips empty lines and space characters before comments.
 
 ## Known Issues
