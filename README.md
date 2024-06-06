@@ -21,8 +21,9 @@ I thought others might find it useful so I posted it here.
 
 ## Known Issues
 - when you have // within a string under certain conditions it will cause the text to be unaligned
+- does not work with most other languages
 
-
+  
 ## Usage
 
 1. Open the `index.html` file in your web browser.
