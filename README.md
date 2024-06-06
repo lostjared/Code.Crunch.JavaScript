@@ -23,7 +23,9 @@ I thought others might find it useful so I posted it here.
 - when you have // within a string under certain conditions it will cause the text to be unaligned
 - does not work with most other languages
 - raw strings as of now are unsupported.
-  
+
+if you want to fix these issues fork and submit a pull request!
+
 ## Usage
 
 1. Open the `index.html` file in your web browser.
