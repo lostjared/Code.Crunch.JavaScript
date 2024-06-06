@@ -22,7 +22,7 @@ I thought others might find it useful so I posted it here.
 ## Known Issues
 - when you have // within a string under certain conditions it will cause the text to be unaligned
 - does not work with most other languages
-
+' raw strings as of now are unsupported.
   
 ## Usage
 
